@@ -32,5 +32,7 @@ process.stdin.on('data',function(chunk){
     } else {
         num2 = Number(chunk);
         process.stdout.write('结果是：' + (num1 + num2));
+
     }
 });
+//process.exit()

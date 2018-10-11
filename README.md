@@ -3,8 +3,6 @@
 
 ## node与javascript的异同：
 
-  [nodeYiTong文件](./study/nodeYiTong.js)
-
    1. 相同点，ECMAScript,数据类型，语法，内置对象，方法；
 
    2. 差异点，顶层对象不同：javasctipt-----window;   node-----global,不存在window;	  		
@@ -27,7 +25,7 @@
 
    1.  内置对象（date,Array），定时器；
 
-   2.  process对象，全局对象 ，进程。
+   2.  process对象，全局对象 ，进程。[process](./study/global/process.js)
 
        2.2  process.argv 
 
@@ -37,7 +35,7 @@
 
        2.5  标准io流；stdin stdout
 
-   3.  buffer类；二进制数据流 
+   3.  buffer类；二进制数据流[buffer](./study/global/buffer.js) 
 
      	3.3  Buffer.from
 
@@ -46,3 +44,12 @@
      	3.5   buf.copy(bf)  
 
 
+##  fs文件流
+
+  1.  fs模块，node核心模块
+
+  2.  fs.open(path,flags,[mode],callback)方法,异步    fs.openSync(path, flags[, mode])同步
+
+  3.  [fs.read(fd, buffer, offset, length, position, callback)](./study/file/fs.js);
+
+  4.  [write](./study/file/write.js)  fs.writeFile(写入文件) writeFileSync(无返回值，同步写入) fs.appendFile(异步写入)

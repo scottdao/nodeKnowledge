@@ -35,6 +35,42 @@
 		// 	var a=b=5
 		// })()
 		// console.log(b)
+
+
+		/*
+		*
+		*
+		*10.12
+		*
+		************/
+		/*var a = 10;
+		(function(){
+			console.log(a)
+			var a =100;
+			console.log(a);
+		})()
+		function F1(){
+			this.name = 'f1'
+		}
+		function F2(){
+			this.name = 'f2'
+			return {
+
+			}
+		}
+		console.log(new F1().name)//f1
+		//console.log(F1().name);//报错,下面的不执行
+		console.log(new F2().name)//undefined
+		console.log(F2().name)//undefined*/
+
+		// console.log(['2a','3','4'].map(parseInt));
+
+
+		//a进制到10进制的转化
+		// console.log(parseInt('2a',0));
+		// console.log(parseInt('3',1))//超过限定基数
+		// console.log(parseInt('4',2))//二进制中没有4
+		console.log(parseInt('1', 2))
 	</script>
 </body>
 </html>

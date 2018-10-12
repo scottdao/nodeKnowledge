@@ -47,7 +47,7 @@ fs.write(fd,'mycode',3,function(){
 *
 *
 ***********************/
-var filename = 'f3.txt';
+var filename = 'f3.js';
 var fs = require('fs')
 /*fs.writeFile(filename,'谁是谁','utf8', function(err){
 	console.log(arguments)
@@ -59,6 +59,22 @@ var fs = require('fs')
 });
 var a = fs.appendFileSync(filename,'空间上的花费多少','utf8')
 console.log(a)*/
-fs.stat(filename,function(err,stats){
-	console.log(err)
+fs.stat(filename,function(err,stats){//判断是否存在该文件。
+	if(!err){
+		fs.appendFile(filename,'我说防守对方', 'utf8',function(err){
+			console.log(arguments);
+			if(!err){
+				console.log('file add content')
+			}
+		});
+	}else{
+		
+		fs.writeFile(filename,'特价房都是','utf8',function(err){
+			console.log(arguments);
+			if(!err){
+				console.log('file create')
+			}
+
+		});
+	}
 })

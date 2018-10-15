@@ -55,4 +55,5 @@
   5.  [readFile](./study/file/readfs.js) 读取 删除 重命名 状态 监听 创建文件夹(mkdir) 删除（rmdir） 读取
 
 
-  ###  [webscoket api](https://socket.io)
+  ###  [webscoket api](https://github.com/theturtle32/WebSocket-Node);
+  ###  [sse api](http://javascript.ruanyifeng.com/htmlapi/eventsource.html);

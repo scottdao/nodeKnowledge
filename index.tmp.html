@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title>webscoket长链接</title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			
+			//var websc = new WebSocket('ws://47.105.103.240:8090');
+			
+			var webs = new WebSocket('ws://127.0.0.1:8080','echo-protocol');
+			webs.onopen = function(){
+				console.log('链接开始')
+				webs.send('123213')
+			}
+			webs.onmessage = function(data){
+				console.log(data.data);
+			}
+			webs.onclose = function(){
+				console.log('断开链接')
+			}
+		</script>
+	</body>
+</html>

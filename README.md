@@ -53,3 +53,6 @@
   4.  [write](./study/file/write.js)  fs.writeFile(写入文件) writeFileSync(无返回值，同步写入) fs.appendFile(异步写入)
 
   5.  [readFile](./study/file/readfs.js) 读取 删除 重命名 状态 监听 创建文件夹(mkdir) 删除（rmdir） 读取
+
+
+  ###  [webscoket api](https://socket.io)

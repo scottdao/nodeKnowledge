@@ -54,7 +54,7 @@ fs.readFile(filename,function(err,content){
 **********/
 var fs = require('fs')
 //var f = fs.mkdirSync('./read');
-fs.readdir('../file',function(err,fileList){
+fs.readdir('../file',function(err,fileList){//mode 代表是文件，还是文件夹；
 	//console.log(arguments)
 	fileList.forEach( function(element, index) {
 		//console.log(element)
@@ -66,7 +66,7 @@ fs.readdir('../file',function(err,fileList){
 					break;
 				case 16822:
 					console.log('文件夹--'+element)
-				break;
+				    break;
 				default:
 				break;
 			}

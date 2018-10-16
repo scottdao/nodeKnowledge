@@ -74,7 +74,6 @@ fs.stat(filename,function(err,stats){//判断是否存在该文件。
 			if(!err){
 				console.log('file create')
 			}
-
 		});
 	}
 })

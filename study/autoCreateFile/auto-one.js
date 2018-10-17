@@ -60,16 +60,36 @@ function createfile(err){
 *2.监听合并代码。监听fileIndex文件夹中的文件变化
 *
 */
+var path = require('path')
+
 function createHeBingCode(codeFlag){
 	if(!codeFlag){//表示未自动创建目录自动创建
-		//先读取文件夹,再查看文件状态，后监听文件变化;
+		//先监听文件
 		var filename = './fileIndex';
-		var fss = fs.readdirSync(filename);//同步读取
-		fss.forEach( function(element, index) {
-			fs.stas(filename,function(err,stats){
-				//console.log()
-			})
+		var createObj = {};
+		fs.watch(filename, function(changestatus,changefile){
+			//console.log(arguments)
+			switch (changestatus) {
+				case 'change':
+					createObj[1] = changefile
+					var cf = filename + '/' +createObj[1];
+					var content = fs.readFileSync(cf);//读取到的内容
+					//console.log(content.toString());
+					var pa = projectData.name + '/js/one.js';
+
+					
+					console.log(content)
+					fs.writeFileSync(pa,content.toString());
+					break;
+				case 'rename':
+					
+					break;
+				default:
+					// statements_def
+					break;
+			}
 		});
+		//process.exit()
 		// fs.stat('./fileIndex',function(err,stats){
 		// 	console.log(stats);
 		// })
@@ -77,4 +97,27 @@ function createHeBingCode(codeFlag){
 		// 	console.log(arguments);
 		// })
 	}
+}
+
+function readFile(){
+	var filename = './fileIndex';
+		var fss = fs.readdirSync(filename);//同步读取
+		fss.forEach( function(element, index) {
+			//console.log(element)
+			var p = filename + '/' +element
+			fs.stat(p,function(err,stats){
+				//console.log(err)
+				if(!err){
+					console.log(stats);
+					switch(stats.mode){
+						case 16822:
+						break;
+						case 37084:
+						break;
+					}
+				}else{
+					console.warn('信息查看失败');
+				}
+			})
+		});
 }

@@ -54,6 +54,25 @@
 
   5.  [readFile](./study/file/readfs.js) 读取 删除 重命名 状态 监听 创建文件夹(mkdir) 删除（rmdir） 读取
 
+## [自动化项目构建及简单的代码合并](./study/autoCreateFile/auto-one.js)
 
-  ###  [webscoket api](https://github.com/theturtle32/WebSocket-Node);
-  ###  [sse api](http://javascript.ruanyifeng.com/htmlapi/eventsource.html);
+## [node web 开发](./study/nodeweb/nodeweb.js)
+    
+  1. http.createServer();  
+
+  2. server.listen() 监听；
+
+  3. request请求；
+
+  4. response.writeHead();  写入头信息；也可以通过setHeader();
+
+  5. request.url 通过用户点进入的路径，让后台获取用户进入的路径；
+
+  6. [url模块](./study/nodeweb/nodeserver.js)，（url.parse()）通过这个模块url.parse()方法获取整个路径的参数;
+
+## 实现分离：fs模块,分离[fs](./study/nodeweb/sep.js)；
+
+##  get和post请求
+
+### [webscoket api](https://github.com/theturtle32/WebSocket-Node);
+### [sse api](http://javascript.ruanyifeng.com/htmlapi/eventsource.html);

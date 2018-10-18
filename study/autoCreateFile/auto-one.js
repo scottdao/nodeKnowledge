@@ -67,20 +67,24 @@ function createHeBingCode(codeFlag){
 		//先监听文件
 		var filename = './fileIndex';
 		var createObj = {};
+		var a = 0 ;
 		fs.watch(filename, function(changestatus,changefile){
 			//console.log(arguments)
+			a++;
 			switch (changestatus) {
 				case 'change':
-					createObj[1] = changefile
-					var cf = filename + '/' +createObj[1];
+				if(a==2){
+					a=0;
+					
+					var cf = filename + '/' +changefile;
 					var content = fs.readFileSync(cf);//读取到的内容
 					//console.log(content.toString());
 					var pa = projectData.name + '/js/one.js';
-
-					
-					console.log(content)
-					fs.writeFileSync(pa,content.toString());
+					//console.log(a)
+					console.log(content.toString())
+					fs.appendFileSync(pa,content.toString());
 					break;
+				}
 				case 'rename':
 					
 					break;

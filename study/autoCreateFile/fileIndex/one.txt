@@ -2,4 +2,3 @@
 function l(){
 	var a = '1213'
 }
-asdfsd

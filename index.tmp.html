@@ -10,7 +10,10 @@
 			var webs = new WebSocket('ws://127.0.0.1:8080','echo-protocol');
 			webs.onopen = function(){
 				console.log('链接开始')
-				webs.send('123213')
+				webs.send('123213');
+				setInterval(function(){
+					webs.send('123213')
+				},10000);
 			}
 			webs.onmessage = function(data){
 				console.log(data.data);

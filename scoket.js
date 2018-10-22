@@ -35,7 +35,7 @@ wsServer.on('request', function(request) {
     connection.on('message', function(message) {//接受客户端的信息
         if (message.type === 'utf8') {
             console.log('Received Message: ' + message.utf8Data);
-            connection.sendUTF(message.utf8Data);
+            connection.sendUTF(JSON.stringify({message:message.utf8Data,error:null}));
         }
         else if (message.type === 'binary') {
             console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');

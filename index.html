@@ -13,7 +13,14 @@
 </head>
 <body>
 	<div>我是numer one</div>
+	<audio src="./1.mp3" controls id='aud'></audio>
 	<script  type="text/javascript" charset="utf-8" >
+		var aud = document.getElementById('aud');
+		console.log(aud.currentTime);
+		
+		aud.oncanplay = function(){
+			console.log(aud.duration);
+		}
 		// a = 10;
 		// alert(window.a);
 		// alert(window.a);
@@ -70,7 +77,7 @@
 		// console.log(parseInt('2a',0));
 		// console.log(parseInt('3',1))//超过限定基数
 		// console.log(parseInt('4',2))//二进制中没有4
-		console.log(parseInt('1', 2))
+		//console.log(parseInt('1', 2))
 	</script>
 </body>
 </html>

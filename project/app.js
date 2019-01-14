@@ -4,7 +4,8 @@ var app = express();
 
 var swig = require('swig'); 
 
-
+//静态文件
+app.use('/public', express.static(__dirname+'/public'));
 /**
 *
 *模版引擎；
@@ -31,12 +32,17 @@ app.set('view engine','html');
 */
 swig.setDefaults({cache:false});
 
-app.get('/',function(req, res){
-	//res.send('hello world!');
+/*
+*req:request对象
+* res:response对象
+* next函数
+**/
+app.get('/',function(req, res, next){
+	//res.send('hello world!');//next,
+	//res.setHeader('content-type', 'text/css');
 	res.render('index');
 });
 
 app.listen(8080,()=>{
 	console.log('启动服务...');
 })
-

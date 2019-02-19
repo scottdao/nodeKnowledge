@@ -4,6 +4,8 @@ var app = express();
 
 var swig = require('swig'); 
 
+var mongoose = require('mongoose');
+
 //静态文件
 app.use('/public', express.static(__dirname+'/public'));
 /**
@@ -33,15 +35,14 @@ app.set('view engine','html');
 swig.setDefaults({cache:false});
 
 /*
-*req:request对象
-* res:response对象
-* next函数
+* 根据不同功能，进行模块化开发
 **/
-app.get('/',function(req, res, next){
-	//res.send('hello world!');//next,
-	//res.setHeader('content-type', 'text/css');
-	res.render('index');
-});
+app.use('/admin', require('./routers/admin'));
+app.use('/api', require('./routers/api'));
+app.use('/', require('./routers/main'));
+
+//链接数据库
+mongoose.connect();
 
 app.listen(8080,()=>{
 	console.log('启动服务...');

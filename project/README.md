@@ -15,7 +15,7 @@
 
 var app = express();
 
-var swig = require('swig'); 
+var swig = require('swig');
 
 //静态文件
 app.use('/public', express.static(__dirname+'/public'));
@@ -60,3 +60,6 @@ app.listen(8080,()=>{
 	console.log('启动服务...');
 })
 ```
+
+- 开启 mongo 数据库
+  `mongod --dbpath D:\study\github\nodeKnowledge\project\db --port 27018`

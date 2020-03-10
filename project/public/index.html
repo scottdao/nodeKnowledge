@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+    </style>
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body>
+    <header>
+        <div class="header-nav">
+            <div>欢迎来到刘道云博客</div>
+            <div id="quickReges">还没有注册吧？<a href="javascript:;" id='switch'>赶快注册</a></div>
+            <div id='haveAccount' style="display: none;">已有账号？<a href="javascript:;" id="switchReges" >登录</a></div>
+        </div>
+    </header>
+    <div class="body-login-all" id='login'> 
+        <div class="login-frame">
+            <div class="login-header">
+                账号登录
+            </div>
+            <div class="form-login">
+                <form >
+                    <ul>
+                        <li style="text-align: left; height: 30px;">
+                            <span class="li-account-tip" style="display:none;" id="please-tip">请输入账号</span>
+                        </li>
+                        <li>
+                            <input type="text" placeholder="用户名" id="userName" style="margin-top: 0;">
+                        </li>
+                        <li>
+                            <input type="password" placeholder="密码" id="pwsd">
+                        </li>
+                        <li> <button type="button" id="login-btn">登录</button></li>
+                    </ul>
+                      
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="body-login-all" style="display: none;" id="regesiter"> 
+        <div class="login-frame">
+            <div class="login-header">
+                账号注册
+            </div>
+            <div class="form-login">
+                <form >
+                    <ul>
+                        <li style="text-align: left; height: 30px;">
+                            <span class="li-account-tip" style="display:none;" id="please-tip-reg">请输入账号</span>
+                        </li>
+                        <li>
+                            <input type="text" placeholder="用户名" id='reg-userName'  style="margin-top: 0;">
+                        </li>
+                        <li>
+                            <input type="password" placeholder="密码" id='reg-pwsd'>
+                        </li>
+                        <li> <button type="button" id="reges-btn">注册</button></li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="login-footer">
+            刘道云开发博客 版权所有 归刘道云所有
+        </div>
+    </footer>
+<script src="./jquery-3.4.1.min.js"></script>
+<script>
+    $(function(){
+        /***
+        * 切换ui
+        **/
+        var login = $('#login');
+        var regesiter = $('#regesiter');
+        $('#switch').click(()=>{
+            login.hide();
+            regesiter.show();
+            $('#quickReges').hide();
+            $('#haveAccount').show()
+        })
+        $("#switchReges").click(()=>{
+            login.show();
+            regesiter.hide();
+            $('#haveAccount').hide();
+            $('#quickReges').show();
+        })
+
+        /***
+        * 校验form表单fo
+        */
+        // 焦点校验
+        const checkFunc = (name, tipName, idTipName) =>{
+            $(name).focus(e=>{
+            $(name).removeClass('check-error');
+            
+        }).blur((e)=>{
+            const value = e.target.value;
+            if(!value){
+                $(name).attr('class','check-error');
+                $(idTipName).text(`请输入${tipName}`).show();
+                /// $('#please-tip').text(`请输入${tipName}`).show();
+            }else{
+                $(idTipName).hide();
+            }
+            
+        })
+        }
+        checkFunc('#userName', '账号', '#please-tip');
+        checkFunc('#pwsd', '密码', '#please-tip');
+        checkFunc('#reg-userName', '账号', '#please-tip-reg');
+        checkFunc('#reg-pwsd', '密码', '#please-tip-reg');
+
+        // 按钮校验
+        const btnCheckFn = (btnName, nameSty) =>{
+            $(btnName).click(()=>{
+            const userName = $(`#${nameSty?`${nameSty}-userName`:"userName"}`).val();
+            const pwsd =  $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).val();
+            if(!userName){
+                $(`#${nameSty?`${nameSty}-userName`:"userName"}`).attr('class','check-error');
+                $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).text(`请输入账号`).show();
+            }else if(!pwsd){
+                $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).attr('class','check-error');
+                $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).text(`请输入密码`).show();
+            }else{
+                $(`#${nameSty?`${nameSty}-userName`:"userName"}`).removeClass('check-error');
+                $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).removeClass('check-error');
+                $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).hide();
+            }
+        })
+        }
+        btnCheckFn('#login-btn');
+        btnCheckFn('#reges-btn', 'reg');
+       
+    })
+</script>
+</body>
+</html>

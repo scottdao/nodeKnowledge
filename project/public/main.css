@@ -1,3 +1,114 @@
+/* body{
+     background-color:blue; */
+/* } */ 
+*,html, body, p,ul,li,div{
+    margin:0;
+    padding:0;
+}
 body{
-    background-color:blue;
+    background-color: #efefee;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.85);
+}
+a{
+    text-decoration: none;
+}
+header{
+    width: 100%;
+    height: 56px;
+    background-color: #ffffff;
+}
+.header-nav{
+    width: 800px;
+    margin: 0 auto;
+    display: flex;
+    line-height: 55px;
+    justify-content: space-between;
+}
+.header-nav a{
+    color:#f12b15;
+}
+/* 登录界面样式 */
+.body-login-all .login-frame{
+    width: 800px;
+    margin: 30px auto;
+    min-height: 500px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,.2);
+    overflow: hidden;
+}
+.login-frame:before,.login-frame:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+.login-header{
+    width: 100%;
+    padding: 30px 0;
+    color: #999;
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-block;
+    background: #fff;
+    line-height: 30px;
+    /* padding: 0 10px; */
+    text-align: center;
+}
+footer{
+    width: 100%;
+    height: 58px;
+    background-color: #ffffff;
+}
+.login-footer{
+    line-height: 58px;
+    color: #a9a9a9;
+    font-size: 13px;
+    text-align: center;
+}
+.form-login{
+    text-align: center;
+}
+.form-login ul li input{
+    
+    width: 384px;
+    border: 1px solid #e5e5e5;
+    color: #8c8c8c;
+    outline: none;
+    line-height: 30px;
+    font-size: 14px;
+    height: 30px;
+    padding: 7px;
+    background: transparent;
+    margin-top: 20px;
+}
+.form-login ul li button{
+    width: 400px;
+    border: 1px solid #666;
+    color: #666;
+    text-align: center;
+    height: 46px;
+    display: block;
+    margin: 20px auto;
+    font-size: 18px;
+    font-weight: bold;
+    background: #fff;
+    border-radius: 4px;
+    line-height: 44px;
+    cursor: pointer;
+}
+
+.form-login ul li input.check-error {
+    border-color: #ff7200;
+}
+.form-login ul{
+    width: 400px;
+    margin: 0 auto;
+    list-style:none;
+}
+.form-login ul li .li-account-tip{
+    margin-bottom: 0;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
 }

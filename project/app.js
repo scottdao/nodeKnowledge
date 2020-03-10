@@ -6,6 +6,12 @@ var swig = require("swig");
 
 var mongoose = require("mongoose");
 
+var bodyParse = require('body-parser');
+
+app.use(bodyParse.urlencoded({
+  extended:false,
+}))
+app.use(bodyParse.json()) // application/json
 //静态文件, 静态文件进入路由的资源
 app.use("/public", express.static(__dirname + "/public"));
 /**
@@ -37,6 +43,7 @@ swig.setDefaults({ cache: false });
 /*
  * 根据不同功能，进行模块化开发
  **/
+
 app.use("/admin", require("./routers/admin"));
 app.use("/api", require("./routers/api"));
 app.use("/", require("./routers/main"));

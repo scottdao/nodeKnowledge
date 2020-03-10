@@ -59,6 +59,9 @@
                         <li>
                             <input type="password" placeholder="密码" id='reg-pwsd'>
                         </li>
+                        <li>
+                            <input type="password" placeholder="确认密码" id='reg-pwsd-agin'>
+                        </li>
                         <li> <button type="button" id="reges-btn">注册</button></li>
                     </ul>
                 </form>
@@ -101,6 +104,8 @@
             
         }).blur((e)=>{
             const value = e.target.value;
+            // const pwsdAgin = $('reg-pwsd-agin');
+            // const pwsd = $('reg-pwsd')
             if(!value){
                 $(name).attr('class','check-error');
                 $(idTipName).text(`请输入${tipName}`).show();
@@ -115,12 +120,15 @@
         checkFunc('#pwsd', '密码', '#please-tip');
         checkFunc('#reg-userName', '账号', '#please-tip-reg');
         checkFunc('#reg-pwsd', '密码', '#please-tip-reg');
+        checkFunc('#reg-pwsd-agin', '确认密码', '#please-tip-reg');
+
 
         // 按钮校验
-        const btnCheckFn = (btnName, nameSty) =>{
+        const btnCheckFn = (btnName, nameSty, callBack) =>{
             $(btnName).click(()=>{
             const userName = $(`#${nameSty?`${nameSty}-userName`:"userName"}`).val();
             const pwsd =  $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).val();
+         
             if(!userName){
                 $(`#${nameSty?`${nameSty}-userName`:"userName"}`).attr('class','check-error');
                 $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).text(`请输入账号`).show();
@@ -131,11 +139,33 @@
                 $(`#${nameSty?`${nameSty}-userName`:"userName"}`).removeClass('check-error');
                 $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).removeClass('check-error');
                 $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).hide();
+                callBack({
+                    userName,
+                    pwsd
+                })
             }
         })
         }
-        btnCheckFn('#login-btn');
-        btnCheckFn('#reges-btn', 'reg');
+        btnCheckFn('#login-btn', '', ()=>{});
+        btnCheckFn('#reges-btn', 'reg', (data)=>{
+            console.log(data)
+            const pswdAgin =$('#reg-pwsd-agin').val();
+           
+            fetch('/api/userRegister', {
+                method:"post",
+                body: JSON.stringify({
+                    ...data,
+                    pswdAgin
+                }), 
+                mode: 'cors',
+                credentials: 'include',
+                headers: new Headers({
+                    'Content-Type': 'application/JSON'
+                })
+            }).then((res)=>res.json()).then(req=>{
+                console.log(req)
+            })
+        });
        
     })
 </script>

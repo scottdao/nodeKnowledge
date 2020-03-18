@@ -8,15 +8,29 @@
 
     </style>
     <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="./layui/css/layui.css">
 </head>
 <body>
     <header>
         <div class="header-nav">
-            <div>欢迎来到刘道云博客</div>
+            <div>欢迎来到<span>财侠</span>博客</div>
+            <div id='userInfo' style="display: none;">
+                ldy
+            </div>
             <div id="quickReges">还没有注册吧？<a href="javascript:;" id='switch'>赶快注册</a></div>
             <div id='haveAccount' style="display: none;">已有账号？<a href="javascript:;" id="switchReges" >登录</a></div>
         </div>
     </header>
+    <div class="body-login-all" id='loginInfo' style="display: none;"> 
+        <div class="login-frame">
+            <div class="login-header">
+                用户信息
+            </div>
+            <div class="form-login" id='infoBase'>
+               
+            </div>
+        </div>
+    </div>
     <div class="body-login-all" id='login'> 
         <div class="login-frame">
             <div class="login-header">
@@ -70,12 +84,14 @@
     </div>
     <footer>
         <div class="login-footer">
-            刘道云开发博客 版权所有 归刘道云所有
+            财侠开发博客 版权所有 归刘道云所有
         </div>
     </footer>
 <script src="./jquery-3.4.1.min.js"></script>
+<script src="./layui/layui.all.js"></script>
 <script>
     $(function(){
+        var layer = layui.layer
         /***
         * 切换ui
         **/
@@ -146,24 +162,50 @@
             }
         })
         }
-        btnCheckFn('#login-btn', '', ()=>{});
+    const postRequest = (url,data,callBack) =>{
+            fetch(url, {
+                method:"post",
+            body: JSON.stringify({
+                ...data,
+            }), 
+            mode: 'cors',
+            credentials: 'include',
+            headers: new Headers({
+                'Content-Type': 'application/JSON'
+            })
+        }).then((res)=>res.json()).then(req=>{
+            // console.log(req)
+            if(req.success){
+                callBack(req)
+            }else{
+                layer.msg(req.message)
+            }
+        })
+    }
+        btnCheckFn('#login-btn', '', (data)=>{
+            console.log(data);
+            postRequest('/api/userLogin',{...data},req=>{
+                console.log(req, '222');
+                if(req.success){
+                    $('#userInfo').show().text(req.data.userName);
+                    $('#quickReges').hide(); 
+                    $("#login").hide();
+                    $('#loginInfo').show();
+                    $('#infoBase').text(req.data.userName);
+                }else{
+                    layer.msg(`登录失败，${req.message}`);
+                }
+            })
+        });
         btnCheckFn('#reges-btn', 'reg', (data)=>{
             console.log(data)
             const pswdAgin =$('#reg-pwsd-agin').val();
-           
-            fetch('/api/userRegister', {
-                method:"post",
-                body: JSON.stringify({
-                    ...data,
-                    pswdAgin
-                }), 
-                mode: 'cors',
-                credentials: 'include',
-                headers: new Headers({
-                    'Content-Type': 'application/JSON'
-                })
-            }).then((res)=>res.json()).then(req=>{
-                console.log(req)
+            postRequest('/api/userRegister', {...data,pswdAgin},(req)=>{
+                    layer.msg('注册成功,请进行登录！');
+                    login.show();
+                    regesiter.hide();
+                    $('#haveAccount').hide();
+                    $('#quickReges').show();
             })
         });
        

@@ -4,4 +4,5 @@ neo4j图形数据库
 
 ./mongod  --shutdown 关闭进程
 - 开启 mongo 数据库
-  `mongod --dbpath D:\study\github\nodeKnowledge\study\mongodb\db --port 27018`
+  `mongod --dbpath D:\study\github\nodeKnowledge\study\mongodb\db --port 27018`;
+  

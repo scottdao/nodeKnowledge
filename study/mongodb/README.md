@@ -46,3 +46,32 @@ neo4j图形数据库
     1. local,永远不会被复制；
     2. config: 内部使用，保存分片信息；
     3.  命名空间不能超过121字节；
+    #### 基础数据类型
+       +  支持js正则表达式
+        + 基本数据类型，new Date()；
+        +  支持js代码；
+        + 支持二进制数据（通过代码写进取），不支持shell写入；
+        + 支持js的引用类型；
+        + 内嵌文档；
+        + bson 二进制，节省空间，支持数据类型比json更多。
+        + objectId格式：
+        -  12字节 
+        - 4位时间戳+3位机器号+2位pid（进程号）+3位计数器
+        - 3位计数器共2^24个数； 
+      ##### mongodb增删改
+      + **插入**
+      - 插入单个文档：`db.account.insert()`
+      -  插入不能超过4MB；批量插入，最大消息不超过16MB。 
+      - 插入原理：驱动将文档转为bson，检查是否有id键，传入至数据库，数据库解析bson，不做有效性校验，原样存入数据库。
+      + **删除**
+      - `db.account.remove()`与`db.account.drop()`区别；
+        1. remove不删除索引，性能较差；drop删除这个集合，性能较好；
+        2. remove 需要查询条件；drop不需要；
+      + **更新**
+      - `db.account.update`加条件; $set用法,使用修改器进行局部更新；去掉键值：$unset；$inc:对number类型进行加减，必须是数字；$push,数组修改器；$addToSet, 不重复向数组填值；$pop,数组尾删属性1，数组头删属性-1;。
+      - 多文档更新：`db.account.update({},{},flase,true(多文档更新))`
+      ```
+      db.account.update({_id:"123"},{$set:{password:'123'}})
+      ```
+      - `db.runCommand({getLastError:1})`：执行getLastError时，驱动程序会等待数据库返回结果；
+      ##### mongodb 查寻语法

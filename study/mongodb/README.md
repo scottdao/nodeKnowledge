@@ -75,3 +75,48 @@ neo4j图形数据库
       ```
       - `db.runCommand({getLastError:1})`：执行getLastError时，驱动程序会等待数据库返回结果；
       ##### mongodb 查寻语法
+      - 查询所有文档：`db.account.find();`
+      - 简单条件查询：`db.account.find({'userName':'bbs0'})`;
+      - 多值匹配条件:`db.account.find({name:"", pswd:""})`
+      - 返回特定的属性值：`db.account.find({},{add:""(返回指定 的属性,设置1返回，0不返回)})`
+      ```
+      db.account.find({},{add:1,_id:0})//不返回id，返回add属性；
+      ```
+      + 复合查询条件
+      - $gt: 表示大于,'>';$gte:表示大于等于，">="
+      - $lt:表示小于，'<';$lte:表示小于等于,'<='
+      - $ne:表示不等于，'!='
+      - $in:查询[]具体数据
+      - $nin: 查询不是[]条件的数据
+      - $or:或查询[]
+      - not:可以用于任何条件之上，表示取非；
+      ```
+      db.account.find({age:{$lt:20}})
+       db.account.find({age:{$in:[18,20]}})// 查询范围18,20两条
+       db.account.find({age:{$nin:[18,23]}}) // 查询age不是18，23的两条
+       db.account.find({$or:[{name:"test"},{age:18}]}) // name值为test，或者age为18
+      ```
+      + 高级查询  - null；
+      - 条件值：null，即匹配自身，又匹配不存在
+        - 若要查出准确的null值，需要结合$exist
+      `db.account.find({fullName:{$in:[null],$exists:true}})`
+      + 高级查询 - 正则表达式：js；
+      - 遵寻js的正则表达式
+      ```
+      db.accountfind({name:/^test/i}) //加前缀性能最佳。
+      db.account.find({name:/^[a-z]$/i})
+      ```
+      + 高级查询-查询数组
+      ```
+      db.food.insert({fruit:['apple','banana','peach']})
+      db.food.insert({fruit:['apple','banana','watermelon']})
+      db.food.insert({fruit:['apple','banana','cherry']})
+      ```
+      - 单元素匹配`db.food.inster(fruit:'cherry')`
+      - 多元素匹配`db.food.find({fruit:{$all:['apple','peach']}})`
+      - 数组下标`db.food.find({'fruit.2':'cherry'})`
+      - 指定数组长度`db.food.find({fruit:{$size:3}})`
+      + 高级查询-内嵌文档；
+      - 点查寻`db.docment.find({'nameInfo.name':"ldy"})`
+      - 内嵌文档，多个键值匹配，采用$elemMatch数组构成的内嵌文档；
+      `db.docuemnt.find({list:{$elemMatch:{atr:"caixia",scr:6}}})`

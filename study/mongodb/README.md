@@ -106,7 +106,7 @@ neo4j图形数据库
       db.accountfind({name:/^test/i}) //加前缀性能最佳。
       db.account.find({name:/^[a-z]$/i})
       ```
-      + 高级查询-查询数组
+      + **高级查询-查询数组**
       ```
       db.food.insert({fruit:['apple','banana','peach']})
       db.food.insert({fruit:['apple','banana','watermelon']})
@@ -116,7 +116,44 @@ neo4j图形数据库
       - 多元素匹配`db.food.find({fruit:{$all:['apple','peach']}})`
       - 数组下标`db.food.find({'fruit.2':'cherry'})`
       - 指定数组长度`db.food.find({fruit:{$size:3}})`
-      + 高级查询-内嵌文档；
+      + **高级查询-内嵌文档**
       - 点查寻`db.docment.find({'nameInfo.name':"ldy"})`
       - 内嵌文档，多个键值匹配，采用$elemMatch数组构成的内嵌文档；
       `db.docuemnt.find({list:{$elemMatch:{atr:"caixia",scr:6}}})`
+      +  **where 查询**
+      - 查询文档两个属性或者以上的值相等
+      - 不能用索引，并且文档要从bson转成javascript对象，查询速度非常慢
+      -  
+      ```
+      db.food.find({
+        $where:function(){//js语法
+              for(var current in this){
+                for(var other in this){
+                  if(current != other && this[current] == this[other]){
+                    return true
+                  }
+                }
+              }
+              return false;
+        }
+      })
+      ```
+      + **游标**
+      - 定义游标，不会立即执行：`var cursor = db.liu.find();`
+      - 游标迭代器： `while(cursor.hasNext()){ obj = cursor.next(); }`
+      - 执行cursor.hasNext()时，查询发送服务器，执行真正查询，shell会获取前100个或者4M数据（两者较小）返回。
+      - 游标一定得关闭：`cursor.close()`;
+      - 限制数据结果：`db.liu.find().limit(5)`
+      - 跳过匹配文档：`db.liu.skip(5)`
+      - 排序:sort 用一个对象作为参数，键值表示，键对应文档键名，值表示排序方向。1是生序，-1是降序。
+      `db.liu.find().sort({ldy:1})`
+      - 多键复合排序：
+      `db.account.find.sort({userName：1，age:-1})`
+
+      - skip跳转分页：`db.liu.find({y:'post'}).limit(20).skip(20).sort({ldy:1})`;
+      - 游标原理:
+          1. 服务端游标消耗内存及资源，要尽快释放；
+          2. 游标遍历完成或者客户端发消息终止释放游标；
+          3. 游标在客户端不在作用域，驱动会向服务器发消息销毁游标；
+          4. 超时销毁机制，游标即使在客户端作用域内，但10分钟不用，也会自动销毁；
+          5. 如果关闭游标超时销毁机制，游标使用完，一定要显示将其关闭，否则会一直消耗服务器资源。

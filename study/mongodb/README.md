@@ -46,43 +46,43 @@ neo4j图形数据库
     1. local,永远不会被复制；
     2. config: 内部使用，保存分片信息；
     3.  命名空间不能超过121字节；
-    #### 基础数据类型
-       +  支持js正则表达式
-        + 基本数据类型，new Date()；
-        +  支持js代码；
-        + 支持二进制数据（通过代码写进取），不支持shell写入；
-        + 支持js的引用类型；
-        + 内嵌文档；
-        + bson 二进制，节省空间，支持数据类型比json更多。
-        + objectId格式：
-        -  12字节 
-        - 4位时间戳+3位机器号+2位pid（进程号）+3位计数器
-        - 3位计数器共2^24个数； 
-      ##### mongodb增删改
-      + **插入**
+#### 基础数据类型
+   +  支持js正则表达式
+   + 基本数据类型，new Date()；
+   +  支持js代码；
+    + 支持二进制数据（通过代码写进取），不支持shell写入；
+    + 支持js的引用类型；
+    + 内嵌文档；
+    + bson 二进制，节省空间，支持数据类型比json更多。
+    + objectId格式：
+       -  12字节 
+       - 4位时间戳+3位机器号+2位pid（进程号）+3位计数器
+       - 3位计数器共2^24个数； 
+##### mongodb增删改
+  +  **插入**
       - 插入单个文档：`db.account.insert()`
       -  插入不能超过4MB；批量插入，最大消息不超过16MB。 
       - 插入原理：驱动将文档转为bson，检查是否有id键，传入至数据库，数据库解析bson，不做有效性校验，原样存入数据库。
-      + **删除**
+  + **删除**
       - `db.account.remove()`与`db.account.drop()`区别；
         1. remove不删除索引，性能较差；drop删除这个集合，性能较好；
         2. remove 需要查询条件；drop不需要；
-      + **更新**
+   + **更新**
       - `db.account.update`加条件; $set用法,使用修改器进行局部更新；去掉键值：$unset；$inc:对number类型进行加减，必须是数字；$push,数组修改器；$addToSet, 不重复向数组填值；$pop,数组尾删属性1，数组头删属性-1;。
       - 多文档更新：`db.account.update({},{},flase,true(多文档更新))`
       ```
       db.account.update({_id:"123"},{$set:{password:'123'}})
       ```
       - `db.runCommand({getLastError:1})`：执行getLastError时，驱动程序会等待数据库返回结果；
-      ##### mongodb 查寻语法
-      - 查询所有文档：`db.account.find();`
-      - 简单条件查询：`db.account.find({'userName':'bbs0'})`;
-      - 多值匹配条件:`db.account.find({name:"", pswd:""})`
-      - 返回特定的属性值：`db.account.find({},{add:""(返回指定 的属性,设置1返回，0不返回)})`
-      ```
-      db.account.find({},{add:1,_id:0})//不返回id，返回add属性；
-      ```
-      + 复合查询条件
+  #### mongodb 查寻语法
+   - 查询所有文档：`db.account.find();`
+  - 简单条件查询：`db.account.find({'userName':'bbs0'})`;
+  - 多值匹配条件:`db.account.find({name:"", pswd:""})`
+   - 返回特定的属性值：`db.account.find({},{add:""(返回指定 的属性,设置1返回，0不返回)})`
+        ```
+        db.account.find({},{add:1,_id:0})//不返回id，返回add属性；
+        ```
+  + **复合查询条件**
       - $gt: 表示大于,'>';$gte:表示大于等于，">="
       - $lt:表示小于，'<';$lte:表示小于等于,'<='
       - $ne:表示不等于，'!='
@@ -90,23 +90,23 @@ neo4j图形数据库
       - $nin: 查询不是[]条件的数据
       - $or:或查询[]
       - not:可以用于任何条件之上，表示取非；
-      ```
-      db.account.find({age:{$lt:20}})
-       db.account.find({age:{$in:[18,20]}})// 查询范围18,20两条
-       db.account.find({age:{$nin:[18,23]}}) // 查询age不是18，23的两条
-       db.account.find({$or:[{name:"test"},{age:18}]}) // name值为test，或者age为18
-      ```
-      + 高级查询  - null；
+        ```
+        db.account.find({age:{$lt:20}})
+        db.account.find({age:{$in:[18,20]}})// 查询范围18,20两条
+        db.account.find({age:{$nin:[18,23]}}) // 查询age不是18，23的两条
+        db.account.find({$or:[{name:"test"},{age:18}]}) // name值为test，或者age为18
+        ```
+  + **高级查询  - null**；
       - 条件值：null，即匹配自身，又匹配不存在
         - 若要查出准确的null值，需要结合$exist
       `db.account.find({fullName:{$in:[null],$exists:true}})`
-      + 高级查询 - 正则表达式：js；
+  + **高级查询 - 正则表达式：js**；
       - 遵寻js的正则表达式
       ```
       db.accountfind({name:/^test/i}) //加前缀性能最佳。
       db.account.find({name:/^[a-z]$/i})
       ```
-      + **高级查询-查询数组**
+  + **高级查询-查询数组**
       ```
       db.food.insert({fruit:['apple','banana','peach']})
       db.food.insert({fruit:['apple','banana','watermelon']})
@@ -120,7 +120,7 @@ neo4j图形数据库
       - 点查寻`db.docment.find({'nameInfo.name':"ldy"})`
       - 内嵌文档，多个键值匹配，采用$elemMatch数组构成的内嵌文档；
       `db.docuemnt.find({list:{$elemMatch:{atr:"caixia",scr:6}}})`
-      +  **where 查询**
++  **where 查询**
       - 查询文档两个属性或者以上的值相等
       - 不能用索引，并且文档要从bson转成javascript对象，查询速度非常慢
       -  
@@ -138,9 +138,9 @@ neo4j图形数据库
         }
       })
       ```
-      + **游标**
-      - 定义游标，不会立即执行：`var cursor = db.liu.find();`
-      - 游标迭代器： `while(cursor.hasNext()){ obj = cursor.next(); }`
++  **游标**
+    -  定义游标，不会立即执行：`var cursor = db.liu.find();`
+    -  游标迭代器： `while(cursor.hasNext()){ obj = cursor.next(); }`
       - 执行cursor.hasNext()时，查询发送服务器，执行真正查询，shell会获取前100个或者4M数据（两者较小）返回。
       - 游标一定得关闭：`cursor.close()`;
       - 限制数据结果：`db.liu.find().limit(5)`
@@ -157,3 +157,16 @@ neo4j图形数据库
           3. 游标在客户端不在作用域，驱动会向服务器发消息销毁游标；
           4. 超时销毁机制，游标即使在客户端作用域内，但10分钟不用，也会自动销毁；
           5. 如果关闭游标超时销毁机制，游标使用完，一定要显示将其关闭，否则会一直消耗服务器资源。
++  [索引创建](./indexes.js)
+      ```
+      for(i = 0;i<10000;i++){
+        db.acount.insert({userName:"ldy"+i,age:i%60,createTime:new Date()})
+    }
+      ```
+   -    单键索引：`db.account.ensureIndex({userName:1})`
+   -    1--表示升序， -1 ---- 表示降序；
+   -  复合索引：
+      `db.account.ensureIndex({userName:1,age:-1})`
+      `db.account.ensureIndex({userName:1,age:1,createTime:1})`
+   -  只有索引前部的查询才会得到优化
+   - 索引优化查询的同时，会对增删改查带来额外开销。

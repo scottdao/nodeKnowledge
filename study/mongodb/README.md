@@ -116,7 +116,7 @@ neo4j图形数据库
       - 多元素匹配`db.food.find({fruit:{$all:['apple','peach']}})`
       - 数组下标`db.food.find({'fruit.2':'cherry'})`
       - 指定数组长度`db.food.find({fruit:{$size:3}})`
-      + **高级查询-内嵌文档**
+  + **高级查询-内嵌文档**
       - 点查寻`db.docment.find({'nameInfo.name':"ldy"})`
       - 内嵌文档，多个键值匹配，采用$elemMatch数组构成的内嵌文档；
       `db.docuemnt.find({list:{$elemMatch:{atr:"caixia",scr:6}}})`
@@ -157,7 +157,7 @@ neo4j图形数据库
           3. 游标在客户端不在作用域，驱动会向服务器发消息销毁游标；
           4. 超时销毁机制，游标即使在客户端作用域内，但10分钟不用，也会自动销毁；
           5. 如果关闭游标超时销毁机制，游标使用完，一定要显示将其关闭，否则会一直消耗服务器资源。
-+  [索引创建](./indexes.js)
++  **[索引创建](./indexes.js)**
       ```
       for(i = 0;i<10000;i++){
         db.acount.insert({userName:"ldy"+i,age:i%60,createTime:new Date()})
@@ -170,3 +170,10 @@ neo4j图形数据库
       `db.account.ensureIndex({userName:1,age:1,createTime:1})`
    -  只有索引前部的查询才会得到优化
    - 索引优化查询的同时，会对增删改查带来额外开销。
+  + **唯一索引**
+  + (**查询工具**)[https://docs.mongodb.com/manual/reference/explain-results/#queryplanner]
+  `db.acount.find({userName:1} ).explain( "executionStats" )`
+
+  #### 参考文档
+  - (菜鸟教程)[https://www.runoob.com/mongodb/mongodb-indexing.html]
+  - (mongodb文档)(https://docs.mongodb.com/)

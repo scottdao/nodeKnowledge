@@ -172,8 +172,28 @@ neo4j图形数据库
    - 索引优化查询的同时，会对增删改查带来额外开销。
   + **唯一索引**
   + (**查询工具**)[https://docs.mongodb.com/manual/reference/explain-results/#queryplanner]
-  `db.acount.find({userName:1} ).explain( "executionStats" )`
-
+  `db.acount.find({userName:1} ).explain( "executionStats" )`;
+  + 索引：强制制定索引；
+      - hint可以强制制定索引某一个索引；
+      - `db.account.find().hint().explain()`
+      - 自然选择最优选项。
+    + 索引管理：
+    - 索引存储每个数据库的systems.indexs集合中这是一个保留的集合，不能直接对数据进行操作，只能通过ensureIndex和drop
+Index来操作。
+    -  `db.system.indexes.find()`
+    - `db.system.namespaces.find()`
+    -  修改索引: `db.account.ensureIndex({userName:-1},{'background':true})`,创建索引时，在后台请求，不阻塞正常请求。
+    - 删除索引
+    - db.runCommand({dropIndexes:"account", index:"age_-1"})
+  + **聚合统计**
+  - `count`:`db.acount.count();db.account.count({age:30})`
+  - `distinct`:
+      1. 指定键的不同值；
+      2. `db.runCommand({'distinct':"acount",key:"age"})`;必须指定集合和键名。
+      3. 计算distinct后的count:`db.runCommand({'distinct':"acount",key:"age"}).values.length`;
+      4. `db.runCommand({'distinct':"acount",key:"age", query:{"age":{$gt:30}}}).values.length`
+    - 分组：group
+       1. 
   #### 参考文档
   - (菜鸟教程)[https://www.runoob.com/mongodb/mongodb-indexing.html]
   - (mongodb文档)(https://docs.mongodb.com/)

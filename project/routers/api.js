@@ -75,6 +75,7 @@ router.post('/userRegister', (req, res, next)=>{
 
 //登录路由
 router.post('/userLogin', (req, res,next)=>{
+  // console.log(req.cookies, 111)
   const response = {
       code:200,
       data:1,
@@ -84,9 +85,20 @@ router.post('/userLogin', (req, res,next)=>{
     try {
       const data = req.body;
       if(vaildValue(data).flag){
+        
         User.findOne({userName:data.userName, password:data.pwsd }).then(async info=>{
+         
           if(info){
+             console.log(info.userName, 123)
               // console.log(info)
+              
+             //  res.cookie('userName',info.userName,{maxAge:600000})
+
+             req.cookies.set('userInfo', JSON.stringify({
+              _id:info._id,
+              userName:info.userName
+             }))
+
               res.status(200).send({
                ...response,
                data:{
@@ -116,5 +128,19 @@ router.post('/userLogin', (req, res,next)=>{
     } catch (error) {
       res.status(500).send(error)
     }
+})
+
+// 退出登录
+
+router.get('/logout', (req, res, next)=>{
+  req.cookies.set('userInfo', null);
+   response={
+     code:200,
+    data:1,
+    message:'注册成功',
+    success:true
+    
+    }
+    res.status(response.code).send(response);
 })
 module.exports = router;

@@ -8,9 +8,27 @@ var mongoose = require("mongoose");
 
 var bodyParse = require('body-parser');
 
+var Cookies = require('cookies') // 引入cookie插件
+
 app.use(bodyParse.urlencoded({
   extended:false,
 }))
+
+
+app.use((req, res, next)=>{
+  req.cookies = new Cookies(req, res);// 传cookie
+  // 登录信息
+  req.userInfo = {};
+  if(req.cookies.get('userInfo')){
+    try {
+      req.userInfo = JSON.parse(req.cookies.get('userInfo'))
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  next()
+})
+
 app.use(bodyParse.json()) // application/json
 //静态文件, 静态文件进入路由的资源
 app.use("/public", express.static(__dirname + "/public"));
@@ -26,7 +44,7 @@ app.engine("html", swig.renderFile);
  *@第1个参数：必须views，第二个参数是目录
  *
  **/
-app.set("views", "./views");
+app.set("views", "./public");
 
 /*
  *@第一个参数：必须是view engine,第二个参数必须是app.engine中第一个参数定义的模版文件后缀名，两者一致。

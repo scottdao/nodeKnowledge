@@ -7,30 +7,181 @@
     <style>
 
     </style>
-    <link rel="stylesheet" href="./main.css">
-    <link rel="stylesheet" href="./layui/css/layui.css">
+    <link rel="stylesheet" href="/public/main.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+   
 </head>
 <body>
+    <script src="/public/jquery-3.4.1.min.js"></script>
+    <script src="/public/layui/layui.all.js"></script>
+    <script>
+        $(function(){
+            var layer = layui.layer
+            /***
+            * 切换ui
+            **/
+            var login = $('#login');
+            var regesiter = $('#regesiter');
+            $('#switch').click(()=>{
+                login.hide();
+                regesiter.show();
+                $('#quickReges').hide();
+                $('#haveAccount').show()
+            })
+            $("#switchReges").click(()=>{
+                login.show();
+                regesiter.hide();
+                $('#haveAccount').hide();
+                $('#quickReges').show();
+            })
+    
+            /***
+            * 校验form表单fo
+            */
+            // 焦点校验
+            const checkFunc = (name, tipName, idTipName) =>{
+                $(name).focus(e=>{
+                $(name).removeClass('check-error');
+                
+            }).blur((e)=>{
+                const value = e.target.value;
+                // const pwsdAgin = $('reg-pwsd-agin');
+                // const pwsd = $('reg-pwsd')
+                if(!value){
+                    $(name).attr('class','check-error');
+                    $(idTipName).text(`请输入${tipName}`).show();
+                    /// $('#please-tip').text(`请输入${tipName}`).show();
+                }else{
+                    $(idTipName).hide();
+                }
+                
+            })
+            }
+            checkFunc('#userName', '账号', '#please-tip');
+            checkFunc('#pwsd', '密码', '#please-tip');
+            checkFunc('#reg-userName', '账号', '#please-tip-reg');
+            checkFunc('#reg-pwsd', '密码', '#please-tip-reg');
+            checkFunc('#reg-pwsd-agin', '确认密码', '#please-tip-reg');
+    
+    
+            // 按钮校验
+            const btnCheckFn = (btnName, nameSty, callBack) =>{
+                $(btnName).click(()=>{
+                const userName = $(`#${nameSty?`${nameSty}-userName`:"userName"}`).val();
+                const pwsd =  $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).val();
+             
+                if(!userName){
+                    $(`#${nameSty?`${nameSty}-userName`:"userName"}`).attr('class','check-error');
+                    $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).text(`请输入账号`).show();
+                }else if(!pwsd){
+                    $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).attr('class','check-error');
+                    $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).text(`请输入密码`).show();
+                }else{
+                    $(`#${nameSty?`${nameSty}-userName`:"userName"}`).removeClass('check-error');
+                    $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).removeClass('check-error');
+                    $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).hide();
+                    callBack({
+                        userName,
+                        pwsd
+                    })
+                }
+            })
+            }
+        const postRequest = (url,data,callBack) =>{
+                fetch(url, {
+                    method:"post",
+                body: JSON.stringify({
+                    ...data,
+                }), 
+                mode: 'cors',
+                credentials: 'include',
+                headers: new Headers({
+                    'Content-Type': 'application/JSON'
+                })
+            }).then((res)=>res.json()).then(req=>{
+                // console.log(req)
+                if(req.success){
+                    callBack(req)
+                }else{
+                    layer.msg(req.message)
+                }
+            })
+        }
+            btnCheckFn('#login-btn', '', (data)=>{
+                console.log(data);
+                postRequest('/api/userLogin',{...data},req=>{
+                    // console.log(req, '222');
+                    if(req.success){
+                        $('#userInfo').show().text(req.data.userName);
+                        $('#quickReges').hide(); 
+                        $("#login").hide();
+                        $('#loginInfo').show();
+                        $('#infoBase').text(req.data.userName);
+                        window.location.reload();
+                    }else{
+                        layer.msg(`登录失败，${req.message}`);
+                    }
+                })
+            });
+            btnCheckFn('#reges-btn', 'reg', (data)=>{
+                console.log(data)
+                const pswdAgin =$('#reg-pwsd-agin').val();
+                postRequest('/api/userRegister', {...data,pswdAgin},(req)=>{
+                        layer.msg('注册成功,请进行登录！');
+                        login.show();
+                        regesiter.hide();
+                        $('#haveAccount').hide();
+                        $('#quickReges').show();
+                })
+            });
+            // console.log(document.getElementById('logout'))
+            $('#logout').click(()=>{
+        
+            fetch('/api/logout', {
+                    method:"get",
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: new Headers({
+                        'Content-Type': 'application/JSON'
+                    })
+            }).then((res)=>res.json()).then(req=>{
+                // console.log(req)
+               console.log(req);
+               if(req.success){
+                   window.location.reload();
+               }
+            })
+        })
+        })
+      
+    </script>
     <header>
         <div class="header-nav">
             <div>欢迎来到<span>财侠</span>博客</div>
             <div id='userInfo' style="display: none;">
                 ldy
             </div>
+            {% if userInfo._id %}
+            <div>登录成功！<a id='logout'> 退出登录 </a> </div>
+
+            {% else %}
             <div id="quickReges">还没有注册吧？<a href="javascript:;" id='switch'>赶快注册</a></div>
             <div id='haveAccount' style="display: none;">已有账号？<a href="javascript:;" id="switchReges" >登录</a></div>
+            {% endif %}
         </div>
     </header>
-    <div class="body-login-all" id='loginInfo' style="display: none;"> 
+    {% if userInfo._id %}
+    <div class="body-login-all" id='loginInfo' > 
         <div class="login-frame">
             <div class="login-header">
                 用户信息
             </div>
             <div class="form-login" id='infoBase'>
-               
+               {{ userInfo.userName }}
             </div>
         </div>
     </div>
+    {% else %}
     <div class="body-login-all" id='login'> 
         <div class="login-frame">
             <div class="login-header">
@@ -87,129 +238,8 @@
             财侠开发博客 版权所有 归刘道云所有
         </div>
     </footer>
-<script src="./jquery-3.4.1.min.js"></script>
-<script src="./layui/layui.all.js"></script>
-<script>
-    $(function(){
-        var layer = layui.layer
-        /***
-        * 切换ui
-        **/
-        var login = $('#login');
-        var regesiter = $('#regesiter');
-        $('#switch').click(()=>{
-            login.hide();
-            regesiter.show();
-            $('#quickReges').hide();
-            $('#haveAccount').show()
-        })
-        $("#switchReges").click(()=>{
-            login.show();
-            regesiter.hide();
-            $('#haveAccount').hide();
-            $('#quickReges').show();
-        })
-
-        /***
-        * 校验form表单fo
-        */
-        // 焦点校验
-        const checkFunc = (name, tipName, idTipName) =>{
-            $(name).focus(e=>{
-            $(name).removeClass('check-error');
-            
-        }).blur((e)=>{
-            const value = e.target.value;
-            // const pwsdAgin = $('reg-pwsd-agin');
-            // const pwsd = $('reg-pwsd')
-            if(!value){
-                $(name).attr('class','check-error');
-                $(idTipName).text(`请输入${tipName}`).show();
-                /// $('#please-tip').text(`请输入${tipName}`).show();
-            }else{
-                $(idTipName).hide();
-            }
-            
-        })
-        }
-        checkFunc('#userName', '账号', '#please-tip');
-        checkFunc('#pwsd', '密码', '#please-tip');
-        checkFunc('#reg-userName', '账号', '#please-tip-reg');
-        checkFunc('#reg-pwsd', '密码', '#please-tip-reg');
-        checkFunc('#reg-pwsd-agin', '确认密码', '#please-tip-reg');
 
 
-        // 按钮校验
-        const btnCheckFn = (btnName, nameSty, callBack) =>{
-            $(btnName).click(()=>{
-            const userName = $(`#${nameSty?`${nameSty}-userName`:"userName"}`).val();
-            const pwsd =  $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).val();
-         
-            if(!userName){
-                $(`#${nameSty?`${nameSty}-userName`:"userName"}`).attr('class','check-error');
-                $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).text(`请输入账号`).show();
-            }else if(!pwsd){
-                $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).attr('class','check-error');
-                $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).text(`请输入密码`).show();
-            }else{
-                $(`#${nameSty?`${nameSty}-userName`:"userName"}`).removeClass('check-error');
-                $(`#${nameSty?`${nameSty}-pwsd`:"pwsd"}`).removeClass('check-error');
-                $(`#${nameSty?`please-tip-${nameSty}`:"please-tip"}`).hide();
-                callBack({
-                    userName,
-                    pwsd
-                })
-            }
-        })
-        }
-    const postRequest = (url,data,callBack) =>{
-            fetch(url, {
-                method:"post",
-            body: JSON.stringify({
-                ...data,
-            }), 
-            mode: 'cors',
-            credentials: 'include',
-            headers: new Headers({
-                'Content-Type': 'application/JSON'
-            })
-        }).then((res)=>res.json()).then(req=>{
-            // console.log(req)
-            if(req.success){
-                callBack(req)
-            }else{
-                layer.msg(req.message)
-            }
-        })
-    }
-        btnCheckFn('#login-btn', '', (data)=>{
-            console.log(data);
-            postRequest('/api/userLogin',{...data},req=>{
-                console.log(req, '222');
-                if(req.success){
-                    $('#userInfo').show().text(req.data.userName);
-                    $('#quickReges').hide(); 
-                    $("#login").hide();
-                    $('#loginInfo').show();
-                    $('#infoBase').text(req.data.userName);
-                }else{
-                    layer.msg(`登录失败，${req.message}`);
-                }
-            })
-        });
-        btnCheckFn('#reges-btn', 'reg', (data)=>{
-            console.log(data)
-            const pswdAgin =$('#reg-pwsd-agin').val();
-            postRequest('/api/userRegister', {...data,pswdAgin},(req)=>{
-                    layer.msg('注册成功,请进行登录！');
-                    login.show();
-                    regesiter.hide();
-                    $('#haveAccount').hide();
-                    $('#quickReges').show();
-            })
-        });
-       
-    })
-</script>
 </body>
+
 </html>

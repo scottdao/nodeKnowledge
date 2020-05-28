@@ -53,6 +53,8 @@
       }
    ```
 
+ - [generator](./generator.js)
+
    ### 参考文档
 
    - [ES6 入门教程](https://es6.ruanyifeng.com/)

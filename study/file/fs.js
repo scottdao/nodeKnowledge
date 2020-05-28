@@ -21,3 +21,4 @@ fs.read(fd,bf1,0,4,null,function(err,len,newBuff){
 	console.log(len)
 	console.log(newBuff)
 })
+module.exports = {a:'1'}

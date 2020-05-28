@@ -54,6 +54,12 @@
 
   5.  [readFile](./study/file/readfs.js) 读取 删除 重命名 状态 监听 创建文件夹(mkdir) 删除（rmdir） 读取
 
+  6. [readdir]读取文件夹输出文件所有得文件
+
+  7. [fs.stats] 读文件是文件还是文件夹，33206表示文件，16822文件夹
+
+  8. [fs.watch] 监听文件得变化
+ 
 ## [自动化项目构建及简单的代码合并](./study/autoCreateFile/auto-one.js)
 
 ## [node web 开发](./study/nodeweb/nodeweb.js)

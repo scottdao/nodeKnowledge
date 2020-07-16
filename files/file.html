@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <span>base64文件上传:</span>
+        <input  type="file"  
+        id="avatar" 
+        name="avatar"
+        accept="*"  
+        onchange="upFile(this)"
+        multiple
+        />
+        <button onclick='clickUpLoad()'>base64上传文件</button>
+    </div>
+    <div>
+        <span>文件对象进行文件上传:</span>
+        <input  type="file"  
+        id="avatar" 
+        name="avatar"
+        accept="*"  
+        onchange="upFileObject(this)"
+        multiple
+        />
+        <button onclick='clickUpLoadObject()'>文件对象进行文件上传</button>
+    </div>
+    <script src="./utils/handle.js"></script>
+    <script>
+        //  new format-data
+        let newFormat = [];
+        function upFileObject(e){
+            let files = Array.prototype.slice.call(e.files);
+            files.map (item=>{
+              console.log(files);
+            })
+        }
+        function clickUpLoadObject(){
+           fetch('http://127.0.0.1:3000/uploadObject',{
+                method: 'POST',
+                body: JSON.stringify({file:newFormat}),
+                headers:{
+                    'Content-Type':"application/json"
+                }
+           }).then(res=>res.json()).then(res=>{
+               console.log(res)
+           })
+        }
+    </script>
+    <script>
+        // base64
+        let formData = []
+        function upFile(e){
+            let files = Array.prototype.slice.call(e.files);
+            files.map (item=>{
+                readFiles(item).then(res=>{
+                    formData.push({
+                        data:res,
+                        name:item.name,
+                        size:item.size,
+                        type:item.type
+                    });
+                })
+               
+            })
+        }
+        function clickUpLoad(){
+           fetch('http://127.0.0.1:3000/upload',{
+                method: 'POST',
+                body: JSON.stringify({file:formData}),
+                headers:{
+                    'Content-Type':"application/json"
+                }
+           }).then(res=>res.json()).then(res=>{
+               console.log(res)
+           })
+        }
+    </script>
+</body>
+</html>

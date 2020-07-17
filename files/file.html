@@ -35,12 +35,11 @@
         let newFormat = new FormData();
         function upFileObject(e){
             let files = Array.prototype.slice.call(e.files);
-           
             files.map (item=>{
-              console.log(item);
+              console.log(item, '2222');
               newFormat.append(item,'file')
-              newFormat.append(item.name, 'name')
-              newFormat.append(item.size,'size')
+            //   newFormat.append(item.name, 'name')
+            //   newFormat.append(item.size,'size')
             })
         }
         function clickUpLoadObject(){

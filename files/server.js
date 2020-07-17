@@ -13,7 +13,6 @@ function writeFile(text, type){
     }else{
         data = text.data;
     }
-    console.log(data)
     fs.writeFile(`./file/${text.name}`,data,(error)=>{
         if (error) {
             console.warn(error)
@@ -45,7 +44,11 @@ app.post('/upload', (req, res) =>{
 })
 app.post('/uploadObject',(req, res)=>{
     res.header('Content-Type', 'multipart/form-data');
-    console.log(req)
+    // console.log(req.file);
+    req.on('data', (buffer) => {
+       console.log(buffer.toString())
+       let str = buffer.toString()
+    })
     res.json({ success:true,code:0, message:'success'})
 })
 app.listen(port, () => console.log(`file upload app listening on port ${port}!`))

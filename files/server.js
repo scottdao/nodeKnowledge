@@ -10,6 +10,8 @@ function writeFile(text, type){
         data = new Buffer(text.data.replace(/^data:[a-zA-Z0-9]+\/\w+;base64,/,""), type)
     }else if(type === 'binary'){
         data = new Buffer.from(text.data)
+    }else{
+        data = text.data;
     }
     console.log(data)
     fs.writeFile(`./file/${text.name}`,data,(error)=>{
@@ -29,11 +31,21 @@ app.all('*', function (req, res, next) {
   });
 app.get('/', (req, res) => res.send('Hello World!'))
 app.post('/upload', (req, res) =>{
-  res.header('Content-Type', 'application/json;charset=utf-8');
-  const { file } = req.body
-  file.map(item=>{
-    writeFile(item, 'base64')
-  }) 
-  res.json({ success:true,code:0, message:'success'})
+    try {
+        res.header('Content-Type', 'application/json;charset=utf-8');
+        const { file } = req.body
+        file.map(item=>{
+          writeFile(item, 'base64')
+        }) 
+        res.json({ success:true,code:0, message:'success'})
+    } catch (error) {
+        console.log(errors)
+    }
+ 
+})
+app.post('/uploadObject',(req, res)=>{
+    res.header('Content-Type', 'multipart/form-data');
+    console.log(req)
+    res.json({ success:true,code:0, message:'success'})
 })
 app.listen(port, () => console.log(`file upload app listening on port ${port}!`))

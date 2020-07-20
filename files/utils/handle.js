@@ -7,7 +7,7 @@
     }
     return ui8a;
 }
-// 文件读取
+//浏览器端 ---- 文件读取
 function readFiles(item, type='base64'){
     const typeSelect = {
         base64(reader){ // base64
@@ -24,6 +24,7 @@ function readFiles(item, type='base64'){
             if(type ==='binary'){
                 dataFile = readBinary(this.result);
             }
+            console.log(dataFile, 'dataFile',dataFile)
             resolve(dataFile);
         }
         reader.onerror = function(){

@@ -1,18 +1,19 @@
   // base64
 let formData = []
 function upFile(e){
-    let files = Array.prototype.slice.call(e.files);
-    files.map (item=>{
-        readFiles(item).then(res=>{
-            formData.push({
-                data:res,
-                name:item.name,
-                size:item.size,
-                type:item.type
-            });
+   //  let files = Array.prototype.slice.call(e.files);
+  
+    // files.map (item=>{
+        readFiles(e.files[0]).then(res=>{
+            formData = [{
+                    data:res,
+                    name:e.files[0].name,
+                    size:e.files[0].size,
+                    type:e.files[0].type
+            }]
         })
         
-    })
+    // })
 }
 function clickUpLoad(){
     fetch('http://127.0.0.1:3000/upload',{

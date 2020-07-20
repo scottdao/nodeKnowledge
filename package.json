@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "server": "node files/servers/server.js"
+    "server": "node files/servers/server.js",
+    "utils":"node files/utils/handle.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

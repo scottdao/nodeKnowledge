@@ -1,13 +1,16 @@
 {
-  "scripts": {
-    "server": "node files/servers/server.js"
-  },
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "cookies": "^0.7.3",
-    "express": "^4.17.1",
-    "multer": "^1.4.2",
-    "pdf2json": "^1.2.0",
-    "websocket": "^1.0.28"
-  }
+    "scripts": {
+        "server": "node files/servers/server.js",
+        "dev": ".\\node_modules\\.bin\\electron ./study/electron/index.js"
+    },
+    "dependencies": {
+        "body-parser": "^1.18.3",
+        "commander": "^6.0.0",
+        "cookies": "^0.7.3",
+        "electron": "^9.2.0",
+        "express": "^4.17.1",
+        "multer": "^1.4.2",
+        "pdf2json": "^1.2.0",
+        "websocket": "^1.0.28"
+    }
 }

@@ -8,7 +8,7 @@
         "body-parser": "^1.18.3",
         "commander": "^6.0.0",
         "cookies": "^0.7.3",
-        "electron": "^9.2.0",
+        "electron": "^11.5.0",
         "express": "^4.17.1",
         "multer": "^1.4.2",
         "pdf2json": "^1.2.0",
